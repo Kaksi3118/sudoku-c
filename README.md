@@ -50,6 +50,9 @@ cl /W4 main.c sudoku.c io.c /Fe:sudoku.exe
    - Erase with value `0`  
    - Type `C` to check current entries  
    - Type `0 0 0` to quit back to menu  
-5. After quitting a game, you can save your state  
+5. After quitting a game, you can save your state
 6. Back at the main menu, choose **Load Game** to resume
+ 
+## Known Issues
 
+Currently unknown
