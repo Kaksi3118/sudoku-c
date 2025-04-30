@@ -36,18 +36,27 @@ void newGame() {
     generateSudoku(puzzle, solution, hints, n);
     playGame(puzzle, solution, n);
 
-    // After play loop, offer to save
-    {
-      char ans;
-      printf("Save this game? (y/n): ");
-      if (scanf(" %c", &ans)==1 && (ans=='y'||ans=='Y')) {
-        char fn[256];
-        printf("Filename to save: ");
-        if (scanf("%255s", fn)==1) {
-          if (saveGame(fn, puzzle, solution, n))
-            printf("Saved to '%s'.\n", fn);
-          else
-            printf("Failed to save.\n");
+    // Skip save prompt if puzzle is solved
+    int solved_flag = 1;
+    for (int i = 0; i < n && solved_flag; ++i)
+        for (int j = 0; j < n; ++j)
+            if (puzzle[i][j] != solution[i][j])
+                solved_flag = 0;
+
+    if (!solved_flag) {
+      // After play loop, offer to save
+      {
+        char ans;
+        printf("Save this game? (y/n): ");
+        if (scanf(" %c", &ans)==1 && (ans=='y'||ans=='Y')) {
+          char fn[256];
+          printf("Filename to save: ");
+          if (scanf("%255s", fn)==1) {
+            if (saveGame(fn, puzzle, solution, n))
+              printf("Saved to '%s'.\n", fn);
+            else
+              printf("Failed to save.\n");
+          }
         }
       }
     }
