@@ -24,7 +24,7 @@ void newGame() {
         int puzzle[9][9], solution[9][9];
         generateSudoku(puzzle, solution, hints);
         playGame(puzzle, solution);
-} else {
+    } else {
         printf("Board size not implemented yet.\n");
     }
 }
@@ -54,4 +54,39 @@ int main() {
         }
     }
     return 0;
+}
+
+void playGame(int puzzle[9][9], int solution[9][9]) {
+    int row, col, val;
+    while (1) {
+        printGrid(puzzle);
+        printf("Enter row col value (0 0 0 to quit): ");
+        if (scanf("%d %d %d", &row, &col, &val) != 3) break;
+        if (row == 0 && col == 0 && val == 0) break;
+        if (row<1 || row>9 || col<1 || col>9 || val<0 || val>9) {
+            printf("Invalid input.\n"); continue;
+        }
+        if (val == 0) {
+            // erase move
+            puzzle[row-1][col-1] = 0;
+            continue;
+        }
+        if (isCorrectMove(solution, row-1, col-1, val)) {
+            puzzle[row-1][col-1] = val;
+            // check if solved
+            int done = 1;
+            for (int i = 0; i < 9 && done; i++)
+                for (int j = 0; j < 9; j++)
+                    if (puzzle[i][j] != solution[i][j]) {
+                        done = 0; break;
+                    }
+            if (done) {
+                printGrid(puzzle);
+                printf("Congratulations, you solved it!\n");
+                break;
+            }
+        } else {
+            printf("Wrong move.\n");
+        }
+    }
 }
