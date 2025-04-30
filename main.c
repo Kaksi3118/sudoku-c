@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include "sudoku.h"
 #include "io.h"
+#include <time.h>
 
 // forward‐declare so the compiler knows about it
 void playGame(int puzzle[MAX_N][MAX_N],
               int solution[MAX_N][MAX_N],
               int n);
 void loadGameMenu(void);
+void printInstructions(void);
 
 void newGame() {
     int sizeChoice, diffChoice, hints;
@@ -46,6 +48,9 @@ void newGame() {
 }
 
 void playGame(int puzzle[MAX_N][MAX_N], int solution[MAX_N][MAX_N], int n) {
+    time_t start = time(NULL);
+    int moves = 0;
+
     int fixed[MAX_N][MAX_N];
     // Build mask: 1 if this was a hint at start
     for (int i = 0; i < n; i++)
@@ -70,6 +75,7 @@ void playGame(int puzzle[MAX_N][MAX_N], int solution[MAX_N][MAX_N], int n) {
         if (val == 0) {
             // erase move
             puzzle[r][c] = 0;
+            moves++;
             continue;
         }
         if (isMoveValid(puzzle, r, c, val, n)) {
@@ -86,10 +92,17 @@ void playGame(int puzzle[MAX_N][MAX_N], int solution[MAX_N][MAX_N], int n) {
             printf("Congratulations, you solved it!\n");
             break;
         }
+        moves++;
         } else {
             printf("Wrong move.\n");
         }
     }
+
+    // print stats
+    time_t end = time(NULL);
+    int secs = (int)difftime(end, start);
+    printf("\nGame over. Moves: %d, Time: %02d:%02d\n\n",
+           moves, secs/60, secs%60);
 }
 
 // Called when user selects "Load Game"
@@ -103,6 +116,15 @@ void loadGameMenu(void) {
         return;
     }
     playGame(puzzle, solution, n);
+}
+
+// New: Instructions printer
+void printInstructions(void) {
+    printf("\nInstructions:\n");
+    printf("  • Fill every row, column, and sub-grid with all numbers exactly once.\n");
+    printf("  • To make a move, enter: row col value  (e.g. 3 4 5)\n");
+    printf("  • To erase a cell, set value to 0 (e.g. 3 4 0)\n");
+    printf("  • To quit the current game and return to menu: 0 0 0\n\n");
 }
 
 // This code is the main function
@@ -120,7 +142,7 @@ int main() {
                 loadGameMenu();
                 break;
             case 3:
-                printf("Instructions not implemented yet.\n");
+                printInstructions();
                 break;
             case 4:
                 printf("Goodbye!\n");
