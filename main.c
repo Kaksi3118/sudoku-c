@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include "sudoku.h"
 void playGame(int puzzle[9][9], int solution[9][9]) {
+    int fixed[9][9];
+    // Build mask: 1 if this was a hint at start
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            fixed[i][j] = (puzzle[i][j] != 0);
+
     int row, col, val;
     while (1) {
         printGrid(puzzle);
@@ -11,13 +17,19 @@ void playGame(int puzzle[9][9], int solution[9][9]) {
         if (row<1 || row>9 || col<1 || col>9 || val<0 || val>9) {
             printf("Invalid input.\n"); continue;
         }
-        if (val == 0) {
-            // erase move
-            puzzle[row-1][col-1] = 0;
+        int r = row - 1, c = col - 1;
+        // BLOCK any edit on a fixed (hint) cell:
+        if (fixed[r][c]) {
+            printf("Cell [%d,%d] is a given hint and cannot be changed.\n", row, col);
             continue;
         }
-        if (isMoveValid(puzzle, row-1, col-1, val)) {
-        puzzle[row-1][col-1] = val;
+        if (val == 0) {
+            // erase move
+            puzzle[r][c] = 0;
+            continue;
+        }
+        if (isMoveValid(puzzle, r, c, val)) {
+        puzzle[r][c] = val;
         // only after the board is full do we do the final solution‐match:
         int done = 1;
         for (int i = 0; i < 9 && done; i++)
