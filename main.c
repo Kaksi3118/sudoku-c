@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "sudoku.h"
 #include "io.h"
 #include <time.h>
@@ -18,6 +19,11 @@ void newGame() {
     printf("Select difficulty:\n 1) Easy  2) Medium  3) Hard\nChoice: ");
     if (scanf("%d", &diffChoice)!=1) return;
 
+    // Added the line to stop the "doubling the tables" the first time you load the board
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF);
+    
+    // This line is used to set the number of hints based on the difficulty and board size
     switch(diffChoice) {
       case 1: hints= (sizeChoice==1?6:  sizeChoice==2?40:  100); break;
       case 2: hints= (sizeChoice==1?5:  sizeChoice==2?30:  80); break;
@@ -47,52 +53,82 @@ void newGame() {
     }
 }
 
+// This function is used to play the game
 void playGame(int puzzle[MAX_N][MAX_N], int solution[MAX_N][MAX_N], int n) {
     time_t start = time(NULL);
     int moves = 0;
 
+    // This is the mask that is used to check if the cell is a hint
     int fixed[MAX_N][MAX_N];
-    // Build mask: 1 if this was a hint at start
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
             fixed[i][j] = (puzzle[i][j] != 0);
 
+    char line[100];
     int row, col, val;
+    // This is the main loop that runs the game
     while (1) {
         printGrid(puzzle, n);
-        printf("Enter row col value (0 0 0 to quit): ");
-        if (scanf("%d %d %d", &row, &col, &val) != 3) break;
-        if (row == 0 && col == 0 && val == 0) break;
-        if (row<1 || row>n || col<1 || col>n || val<0 || val>n) {
-            printf("Invalid input.\n"); continue;
+        printf("Enter row col val (0 0 0 to quit), or 'C' to check entries: ");
+        if (!fgets(line, sizeof line, stdin)) break;
+        // skip blank lines
+        if (line[0] == '\n') continue;
+
+        // Check‐entries command
+        if (line[0]=='C' || line[0]=='c') {
+            int wrong = 0;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (!fixed[i][j] && puzzle[i][j] != 0
+                        && puzzle[i][j] != solution[i][j]) {
+                        printf("Wrong at [%d,%d]: you have %d, should be %d\n",
+                               i+1, j+1,
+                               puzzle[i][j], solution[i][j]);
+                        wrong++;
+                    }
+                }
+            }
+            if (!wrong)
+                printf("All current entries are correct!\n");
+            continue;
         }
-        int r = row - 1, c = col - 1;
-        // BLOCK any edit on a fixed (hint) cell:
+
+        // Otherwise parse a move
+        if (sscanf(line, "%d %d %d", &row, &col, &val) != 3) {
+            printf("Invalid input.\n");
+            continue;
+        }
+        if (row==0 && col==0 && val==0) break;
+        if (row<1||row>n||col<1||col>n||val<0||val>n) {
+            printf("Invalid input.\n");
+            continue;
+        }
+        int r = row-1, c = col-1;
         if (fixed[r][c]) {
-            printf("Cell [%d,%d] is a given hint and cannot be changed.\n", row, col);
+            printf("Cell [%d,%d] is a given hint and cannot be changed.\n",
+                   row, col);
             continue;
         }
         if (val == 0) {
-            // erase move
             puzzle[r][c] = 0;
             moves++;
             continue;
         }
         if (isMoveValid(puzzle, r, c, val, n)) {
-        puzzle[r][c] = val;
-        // only after the board is full do we do the final solution‐match:
-        int done = 1;
-        for (int i = 0; i < n && done; i++)
-            for (int j = 0; j < n; j++)
-                if (puzzle[i][j] != solution[i][j]) {
-                    done = 0; break;
-                }
-        if (done) {
-            printGrid(puzzle, n);
-            printf("Congratulations, you solved it!\n");
-            break;
-        }
-        moves++;
+            puzzle[r][c] = val;
+            moves++;
+            // only after the board is full do we do the final solution‐match:
+            int done = 1;
+            for (int i = 0; i < n && done; i++)
+                for (int j = 0; j < n; j++)
+                    if (puzzle[i][j] != solution[i][j]) {
+                        done = 0; break;
+                    }
+            if (done) {
+                printGrid(puzzle, n);
+                printf("Congratulations, you solved it!\n");
+                break;
+            }
         } else {
             printf("Wrong move.\n");
         }
@@ -118,13 +154,14 @@ void loadGameMenu(void) {
     playGame(puzzle, solution, n);
 }
 
-// New: Instructions printer
+// This function is used to print the instructions
 void printInstructions(void) {
     printf("\nInstructions:\n");
-    printf("  • Fill every row, column, and sub-grid with all numbers exactly once.\n");
-    printf("  • To make a move, enter: row col value  (e.g. 3 4 5)\n");
-    printf("  • To erase a cell, set value to 0 (e.g. 3 4 0)\n");
-    printf("  • To quit the current game and return to menu: 0 0 0\n\n");
+    printf("  • Fill each row, column and box with all values 1..n once.\n");
+    printf("  • Enter moves as: row col value  (e.g. 3 4 5)\n");
+    printf("  • Erase with value=0 (e.g. 3 4 0)\n");
+    printf("  • Quit game: 0 0 0\n");
+    printf("  • At any point, type 'C' to check your current entries.\n\n");
 }
 
 // This code is the main function

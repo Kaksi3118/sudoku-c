@@ -1,6 +1,7 @@
 #include "io.h"
 #include <stdio.h>
 
+// This function is used to save the game
 int saveGame(const char* filename,
              int puzzle[MAX_N][MAX_N],
              int solution[MAX_N][MAX_N],
@@ -17,6 +18,7 @@ int saveGame(const char* filename,
     return 1;
 }
 
+// This function is used to load the game
 int loadGame(const char* filename,
              int puzzle[MAX_N][MAX_N],
              int solution[MAX_N][MAX_N],
