@@ -166,11 +166,11 @@ void loadGameMenu(void) {
 // This function is used to print the instructions
 void printInstructions(void) {
     printf("\nInstructions:\n");
-    printf("  • Fill each row, column and box with all values 1..n once.\n");
-    printf("  • Enter moves as: row col value  (e.g. 3 4 5)\n");
-    printf("  • Erase with value=0 (e.g. 3 4 0)\n");
-    printf("  • Quit game: 0 0 0\n");
-    printf("  • At any point, type 'C' to check your current entries.\n\n");
+    printf("Fill each row, column and box with all values 1..n once.\n");
+    printf("Enter moves as: row col value  (e.g. 3 4 5)\n");
+    printf("Erase with value=0 (e.g. 3 4 0)\n");
+    printf("Quit game: 0 0 0\n");
+    printf("At any point, type 'C' to check your current entries.\n\n");
 }
 
 // This code is the main function
