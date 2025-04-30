@@ -1,4 +1,34 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "sudoku.h"
+
+// This code starts a new game
+void newGame() {
+    int sizeChoice, diffChoice, hints;
+    printf("\nSelect board size:\n 1) 4×4  2) 9×9  3) 16×16\nChoice: ");
+    if (scanf("%d", &sizeChoice) != 1) return;
+
+    printf("Select difficulty:\n 1) Easy  2) Medium  3) Hard\nChoice: ");
+    if (scanf("%d", &diffChoice) != 1) return;
+
+    // map difficulty → # visible cells
+    switch (diffChoice) {
+      case 1: hints = 40; break;  // easy
+      case 2: hints = 30; break;  // medium
+      case 3: hints = 20; break;  // hard
+      default: hints = 30;
+    }
+    
+// For now only 9x9 grid is implemented
+    if (sizeChoice == 2) {
+        int grid[9][9];
+        generateSudoku(grid, hints);
+        printGrid(grid);
+    } else {
+        printf("Board size not implemented yet.\n");
+    }
+}
+
 
 int main() {
     int choice;
