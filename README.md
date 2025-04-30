@@ -1,5 +1,10 @@
-## Sudoku
+![wiedźminszyn](https://github.com/user-attachments/assets/1eb5e892-0de0-4485-9b21-a25ea017f03c)
+
+## Sudoku in C!
+
 A simple game of sudoku in C language :)
+
+sudoku.exe tested only in 64-bit Windows
 
 ## Build
 
