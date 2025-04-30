@@ -1,16 +1,25 @@
 #ifndef SUDOKU_H
 #define SUDOKU_H
 
-// Generate a full 9×9 solution and remove (81 - hints) cells,
-void generateSudoku(int puzzle[9][9], int solution[9][9], int hints);
+#define MAX_N 16
+
+// Generate a full n×n solution and remove (n*n - hints) cells,
+void generateSudoku(int puzzle[MAX_N][MAX_N],
+                    int solution[MAX_N][MAX_N],
+                    int hints,
+                    int n);
 
 // Check if a move is valid
-int isMoveValid(int puzzle[9][9], int row, int col, int val);
+int isMoveValid(int puzzle[MAX_N][MAX_N],
+                int row,
+                int col,
+                int val,
+                int n);
 
 // Check if a move is correct
-int isCorrectMove(int solution[9][9], int row, int col, int val);
+int isCorrectMove(int solution[MAX_N][MAX_N], int row, int col, int val);
 
-// Print the 9×9 grid
-void printGrid(int grid[9][9]);
+// Print the n×n grid
+void printGrid(int grid[MAX_N][MAX_N], int n);
 
 #endif

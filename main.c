@@ -1,20 +1,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "sudoku.h"
-void playGame(int puzzle[9][9], int solution[9][9]) {
-    int fixed[9][9];
+
+// forward‐declare so the compiler knows about it
+void playGame(int puzzle[MAX_N][MAX_N],
+              int solution[MAX_N][MAX_N],
+              int n);
+
+void newGame() {
+    int sizeChoice, diffChoice, hints;
+    printf("\nSelect board size:\n 1) 4 x 4  2) 9 x 9  3) 16 x 16\nChoice: ");
+    if (scanf("%d", &sizeChoice)!=1) return;
+    printf("Select difficulty:\n 1) Easy  2) Medium  3) Hard\nChoice: ");
+    if (scanf("%d", &diffChoice)!=1) return;
+
+    switch(diffChoice) {
+      case 1: hints= (sizeChoice==1?6:  sizeChoice==2?40:  100); break;
+      case 2: hints= (sizeChoice==1?5:  sizeChoice==2?30:  80); break;
+      case 3: hints= (sizeChoice==1?4:  sizeChoice==2?20:  60); break;
+      default: hints= (sizeChoice==1?5:  sizeChoice==2?30:  80);
+    }
+
+    int n = (sizeChoice==1?4 : sizeChoice==2?9 : 16);
+    int puzzle[MAX_N][MAX_N], solution[MAX_N][MAX_N];
+    generateSudoku(puzzle, solution, hints, n);
+    playGame(puzzle, solution, n);
+}
+
+void playGame(int puzzle[MAX_N][MAX_N], int solution[MAX_N][MAX_N], int n) {
+    int fixed[MAX_N][MAX_N];
     // Build mask: 1 if this was a hint at start
-    for (int i = 0; i < 9; i++)
-        for (int j = 0; j < 9; j++)
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
             fixed[i][j] = (puzzle[i][j] != 0);
 
     int row, col, val;
     while (1) {
-        printGrid(puzzle);
+        printGrid(puzzle, n);
         printf("Enter row col value (0 0 0 to quit): ");
         if (scanf("%d %d %d", &row, &col, &val) != 3) break;
         if (row == 0 && col == 0 && val == 0) break;
-        if (row<1 || row>9 || col<1 || col>9 || val<0 || val>9) {
+        if (row<1 || row>n || col<1 || col>n || val<0 || val>n) {
             printf("Invalid input.\n"); continue;
         }
         int r = row - 1, c = col - 1;
@@ -28,49 +54,23 @@ void playGame(int puzzle[9][9], int solution[9][9]) {
             puzzle[r][c] = 0;
             continue;
         }
-        if (isMoveValid(puzzle, r, c, val)) {
+        if (isMoveValid(puzzle, r, c, val, n)) {
         puzzle[r][c] = val;
         // only after the board is full do we do the final solution‐match:
         int done = 1;
-        for (int i = 0; i < 9 && done; i++)
-            for (int j = 0; j < 9; j++)
+        for (int i = 0; i < n && done; i++)
+            for (int j = 0; j < n; j++)
                 if (puzzle[i][j] != solution[i][j]) {
                     done = 0; break;
                 }
         if (done) {
-            printGrid(puzzle);
+            printGrid(puzzle, n);
             printf("Congratulations, you solved it!\n");
             break;
         }
         } else {
             printf("Wrong move.\n");
         }
-    }
-}
-// This code starts a new game
-void newGame() {
-    int sizeChoice, diffChoice, hints;
-    printf("\nSelect board size:\n 1) 4x4  2) 9x9  3) 16x16\nChoice: ");
-    if (scanf("%d", &sizeChoice) != 1) return;
-
-    printf("Select difficulty:\n 1) Easy  2) Medium  3) Hard\nChoice: ");
-    if (scanf("%d", &diffChoice) != 1) return;
-
-    // map difficulty → # visible cells
-    switch (diffChoice) {
-      case 1: hints = 40; break;  // easy
-      case 2: hints = 30; break;  // medium
-      case 3: hints = 20; break;  // hard
-      default: hints = 30;
-    }
-
-// For now only 9x9 grid is implemented
-    if (sizeChoice == 2) {
-        int puzzle[9][9], solution[9][9];
-        generateSudoku(puzzle, solution, hints);
-        playGame(puzzle, solution);
-    } else {
-        printf("Board size not implemented yet.\n");
     }
 }
 
