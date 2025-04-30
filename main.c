@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "sudoku.h"
+#include "io.h"
 
 // forward‐declare so the compiler knows about it
 void playGame(int puzzle[MAX_N][MAX_N],
               int solution[MAX_N][MAX_N],
               int n);
+void loadGameMenu(void);
 
 void newGame() {
     int sizeChoice, diffChoice, hints;
@@ -25,6 +27,22 @@ void newGame() {
     int puzzle[MAX_N][MAX_N], solution[MAX_N][MAX_N];
     generateSudoku(puzzle, solution, hints, n);
     playGame(puzzle, solution, n);
+
+    // After play loop, offer to save
+    {
+      char ans;
+      printf("Save this game? (y/n): ");
+      if (scanf(" %c", &ans)==1 && (ans=='y'||ans=='Y')) {
+        char fn[256];
+        printf("Filename to save: ");
+        if (scanf("%255s", fn)==1) {
+          if (saveGame(fn, puzzle, solution, n))
+            printf("Saved to '%s'.\n", fn);
+          else
+            printf("Failed to save.\n");
+        }
+      }
+    }
 }
 
 void playGame(int puzzle[MAX_N][MAX_N], int solution[MAX_N][MAX_N], int n) {
@@ -74,6 +92,19 @@ void playGame(int puzzle[MAX_N][MAX_N], int solution[MAX_N][MAX_N], int n) {
     }
 }
 
+// Called when user selects "Load Game"
+void loadGameMenu(void) {
+    char fn[256];
+    printf("Enter save filename: ");
+    if (scanf("%255s", fn)!=1) return;
+    int puzzle[MAX_N][MAX_N], solution[MAX_N][MAX_N], n;
+    if (!loadGame(fn, puzzle, solution, &n)) {
+        printf("Failed to load '%s'.\n", fn);
+        return;
+    }
+    playGame(puzzle, solution, n);
+}
+
 // This code is the main function
 int main() {
     int choice;
@@ -86,7 +117,7 @@ int main() {
                 newGame();
                 break;
             case 2:
-                printf("Load Game not implemented yet.\n");
+                loadGameMenu();
                 break;
             case 3:
                 printf("Instructions not implemented yet.\n");
