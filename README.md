@@ -2,9 +2,23 @@
 
 ## Sudoku in C!
 
-A simple game of sudoku in C language :)
+A simple console game of sudoku in C language :)
 
 sudoku.exe tested only in 64-bit Windows
+
+## Screenshots from console
+
+Menu
+
+![menu](https://github.com/user-attachments/assets/2dc84403-1d68-43c5-8331-d553e911475a)
+
+Selecting grid size and difficulty
+
+![selecting](https://github.com/user-attachments/assets/ca3e96f0-b71e-4728-910a-d15c17d5155c)
+
+Instruction
+
+![instructions](https://github.com/user-attachments/assets/be5a2a78-aa07-48aa-aba6-5d2a6bae7f81)
 
 ## Build
 
