@@ -55,4 +55,5 @@ cl /W4 main.c sudoku.c io.c /Fe:sudoku.exe
  
 ## Known Issues
 
-Currently unknown
+When loading saved game we see the board 2 times
+
