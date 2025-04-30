@@ -18,7 +18,7 @@ void newGame() {
       case 3: hints = 20; break;  // hard
       default: hints = 30;
     }
-    
+
 // For now only 9x9 grid is implemented
     if (sizeChoice == 2) {
         int grid[9][9];
@@ -29,22 +29,22 @@ void newGame() {
     }
 }
 
-
+// This code is the main function
 int main() {
     int choice;
     printf("Sudoku Game\n");
     while (1) {
-        printf("1. New Game\n2. Load Game\n3. Instructions\n4. Exit\nChoose: ");
+        printf("\n1. New Game\n2. Load Game\n3. Instructions\n4. Exit\nChoose: ");
         if (scanf("%d", &choice) != 1) break;
         switch (choice) {
             case 1:
-                // TODO: New Game
+                newGame();
                 break;
             case 2:
-                // TODO: Load Game
+                printf("Load Game not implemented yet.\n");
                 break;
             case 3:
-                // TODO: Instructions
+                printf("Instructions not implemented yet.\n");
                 break;
             case 4:
                 printf("Goodbye!\n");
@@ -54,4 +54,4 @@ int main() {
         }
     }
     return 0;
-} 
+}
