@@ -1,5 +1,5 @@
 ## Sudoku
-A simple game of sudoku in C language
+A simple game of sudoku in C language :)
 
 ## Build
 
