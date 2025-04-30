@@ -21,10 +21,10 @@ void newGame() {
 
 // For now only 9x9 grid is implemented
     if (sizeChoice == 2) {
-        int grid[9][9];
-        generateSudoku(grid, hints);
-        printGrid(grid);
-    } else {
+        int puzzle[9][9], solution[9][9];
+        generateSudoku(puzzle, solution, hints);
+        playGame(puzzle, solution);
+} else {
         printf("Board size not implemented yet.\n");
     }
 }

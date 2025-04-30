@@ -79,18 +79,25 @@ static void removeKDigits(int grid[9][9], int k) {
 }   
 
 // This code generates a Sudoku puzzle with the given number of hints
-void generateSudoku(int grid[9][9], int hints) {
-    // seed once
+void generateSudoku(int puzzle[9][9], int solution[9][9], int hints) {
     srand((unsigned)time(NULL));
-    // zero‐out
+    // zero‐out both arrays
     for (int i = 0; i < 9; i++)
         for (int j = 0; j < 9; j++)
-            grid[i][j] = 0;
+            solution[i][j] = puzzle[i][j] = 0;
 
-    fillDiagonal(grid);
-    fillRemaining(grid, 0, 0);
-    // leave exactly 'hints' cells visible:
-    removeKDigits(grid, 81 - hints);
+    fillDiagonal(solution);
+    fillRemaining(solution, 0, 0);
+    // copy full solution into puzzle, then remove to leave 'hints'
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            puzzle[i][j] = solution[i][j];
+    removeKDigits(puzzle, 81 - hints);
+}
+
+// New helper to validate a move
+int isCorrectMove(int solution[9][9], int row, int col, int val) {
+    return solution[row][col] == val;
 }
 
 // This code prints the 9×9 grid
