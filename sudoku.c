@@ -44,6 +44,15 @@ static int checkIfSafe(int grid[9][9], int row, int col, int num) {
     return !usedInRow(grid, row, num) && !usedInCol(grid, col, num) && unUsedInBox(grid, row - row % 3, col - col % 3, num);
 }
 
+// This code checks if a move is valid
+int isMoveValid(int puzzle[9][9], int row, int col, int val) {
+    // Only allow filling an empty cell
+    if (puzzle[row][col] != 0) 
+        return 0;
+    // Check row/column/3×3‐box constraints
+    return checkIfSafe(puzzle, row, col, val);
+}
+
 // This code fills the three diagonal 3×3 boxes
 static void fillDiagonal(int grid[9][9]) {
     for (int i = 0; i < 9; i += 3)

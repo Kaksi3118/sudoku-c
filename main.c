@@ -16,20 +16,20 @@ void playGame(int puzzle[9][9], int solution[9][9]) {
             puzzle[row-1][col-1] = 0;
             continue;
         }
-        if (isCorrectMove(solution, row-1, col-1, val)) {
-            puzzle[row-1][col-1] = val;
-            // check if solved
-            int done = 1;
-            for (int i = 0; i < 9 && done; i++)
-                for (int j = 0; j < 9; j++)
-                    if (puzzle[i][j] != solution[i][j]) {
-                        done = 0; break;
-                    }
-            if (done) {
-                printGrid(puzzle);
-                printf("Congratulations, you solved it!\n");
-                break;
-            }
+        if (isMoveValid(puzzle, row-1, col-1, val)) {
+        puzzle[row-1][col-1] = val;
+        // only after the board is full do we do the final solution‐match:
+        int done = 1;
+        for (int i = 0; i < 9 && done; i++)
+            for (int j = 0; j < 9; j++)
+                if (puzzle[i][j] != solution[i][j]) {
+                    done = 0; break;
+                }
+        if (done) {
+            printGrid(puzzle);
+            printf("Congratulations, you solved it!\n");
+            break;
+        }
         } else {
             printf("Wrong move.\n");
         }
@@ -38,7 +38,7 @@ void playGame(int puzzle[9][9], int solution[9][9]) {
 // This code starts a new game
 void newGame() {
     int sizeChoice, diffChoice, hints;
-    printf("\nSelect board size:\n 1) 4×4  2) 9×9  3) 16×16\nChoice: ");
+    printf("\nSelect board size:\n 1) 4x4  2) 9x9  3) 16x16\nChoice: ");
     if (scanf("%d", &sizeChoice) != 1) return;
 
     printf("Select difficulty:\n 1) Easy  2) Medium  3) Hard\nChoice: ");
