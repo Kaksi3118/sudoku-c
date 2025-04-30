@@ -40,8 +40,8 @@ static int usedInCol(int grid[9][9], int col, int num) {
 }
 
 // This code checks if it is safe to place number in the cell
-static int checkSafe(int grid[9][9], int row, int col, int num) {
-    return !usedInRow(grid, row, num) && !usedInCol(grid, col, num) && !unUsedInBox(grid, row - row % 3, col - col % 3, num);
+static int checkIfSafe(int grid[9][9], int row, int col, int num) {
+    return !usedInRow(grid, row, num) && !usedInCol(grid, col, num) && unUsedInBox(grid, row - row % 3, col - col % 3, num);
 }
 
 // This code fills the three diagonal 3×3 boxes
