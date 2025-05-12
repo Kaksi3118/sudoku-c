@@ -52,7 +52,19 @@ cl /W4 main.c sudoku.c io.c /Fe:sudoku.exe
    - Type `0 0 0` to quit back to menu  
 5. After quitting a game, you can save your state
 6. Back at the main menu, choose **Load Game** to resume
- 
+
+## Sudoku Solver
+
+In the sa folder ive made a sudoku solver using Simulated Annealing
+
+To bulid exe:
+
+```bash
+ gcc sudoku_sa.c -o sudoku_sa -lm
+```
+
+To run: open sudoku_sa.exe
+
 ## Known Issues
 
 When loading saved game we see the board 2 times
