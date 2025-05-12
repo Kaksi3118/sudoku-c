@@ -20,6 +20,10 @@ Instruction
 
 ![instructions](https://github.com/user-attachments/assets/be5a2a78-aa07-48aa-aba6-5d2a6bae7f81)
 
+Sample game with 1 move and game save
+
+![example](https://github.com/user-attachments/assets/9ba11a8b-2323-4170-b2cc-aba68af4a06f)
+
 ## Build
 
 Requires a C compiler (GCC/MinGW or MSVC):
@@ -46,6 +50,10 @@ cl /W4 main.c sudoku.c io.c /Fe:sudoku.exe
    - Erase with value `0`  
    - Type `C` to check current entries  
    - Type `0 0 0` to quit back to menu  
-5. After quitting a game, you can save your state  
+5. After quitting a game, you can save your state
 6. Back at the main menu, choose **Load Game** to resume
+ 
+## Known Issues
+
+When loading saved game we see the board 2 times
 
